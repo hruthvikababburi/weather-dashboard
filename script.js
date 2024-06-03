@@ -2,6 +2,19 @@ const searchBtn = document.querySelector(".search-btn");
 const cityInput = document.querySelector(".city-input");
 const API_KEY = "3065705f5a9cdacd92c9c9b1c5542cf9";
 
+
+
+const createAndAppendWeatherCard=(eachItem)=>{
+    return `<li class="each-card">
+                <h2> (______)</h2>
+                <h4>Temperature: ___° C</h4>
+                <h4>Wind: ___ M/S</h4>
+                <h4>Humidity: ___%</h4>
+            </li>`
+}
+
+
+
 const getWeatherDetails = (cityName,lat,lon)=>{
     const WEATHER_API_URL = `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}`;
     fetch(WEATHER_API_URL).then(res=>res.json()).then(data=>{
@@ -13,6 +26,12 @@ const getWeatherDetails = (cityName,lat,lon)=>{
             }
         })
         console.log(sixDaysForecast)
+        sixDaysForecast.forEach(eachItem=>{
+            createAndAppendWeatherCard(eachItem)
+        })
+
+
+
     }).catch((error) => {
         console.error('Fetch error:', error);
         alert('An error has occurred while fetching the weather forecast!');
