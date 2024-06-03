@@ -4,6 +4,7 @@ const weatherCardsCont = document.querySelector(".weather-cards");
 const API_KEY = "3065705f5a9cdacd92c9c9b1c5542cf9";
 const container = document.querySelector('container')
 const currentWeather = document.querySelector('.current-weather')
+const locationBtn = document.querySelector('.location-search-btn')
 
 
 const createAndAppendWeatherCard=(cityName,eachItem,index)=>{
@@ -90,4 +91,31 @@ const getCityName = () => {
         });
 };
 
+const getUserCity=()=>{
+    navigator.geolocation.getCurrentPosition(
+        position =>{
+            const {latitude, longitude} = position.coords
+            const REVERSE_GEOCODINGURL= `http://api.openweathermap.org/geo/1.0/reverse?lat=${latitude}&lon=${longitude}&appid=${API_KEY}`
+            fetch(REVERSE_GEOCODINGURL)
+                .then(res=>res.json()).then(data=>{
+                    const {name} = data[0];
+                    getWeatherDetails(name,latitude,longitude);
+                })
+                .catch((error) => {
+                    console.error('Fetch error:', error);
+                    alert('An error has occurred while fetching the details');
+                });
+        },
+        error =>{
+            if(error.code === error.PERMISSION_DENIED){
+                alert('Geolocatiobn request denied. Please reset location permission to grant access again.')
+            }
+            
+        }
+    )
+}
+
+
 searchBtn.addEventListener('click', getCityName);
+locationBtn.addEventListener('click', getUserCity);
+cityInput.addEventListener('keyup', e => e.key === 'Enter' && getCityName())
