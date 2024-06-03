@@ -1,15 +1,17 @@
 const searchBtn = document.querySelector(".search-btn");
 const cityInput = document.querySelector(".city-input");
+const weatherCardsCont = document.querySelector(".weather-cards");
 const API_KEY = "3065705f5a9cdacd92c9c9b1c5542cf9";
 
 
 
 const createAndAppendWeatherCard=(eachItem)=>{
     return `<li class="each-card">
-                <h2> (______)</h2>
-                <h4>Temperature: ___° C</h4>
-                <h4>Wind: ___ M/S</h4>
-                <h4>Humidity: ___%</h4>
+                <h2> (${eachItem.dt_txt.split(' ')[0]})</h2>
+                <img src="https://openweathermap.org/img/wn/${eachItem.weather[0].icon}@2x.png" alt="weather-icon">
+                <h4>Temperature: ${(eachItem.main.temp - 273.15).toFixed(2)}° C</h4>
+                <h4>Wind: ${eachItem.wind.speed} M/S</h4>
+                <h4>Humidity: ${eachItem.main.humidity}%</h4>
             </li>`
 }
 
@@ -27,7 +29,7 @@ const getWeatherDetails = (cityName,lat,lon)=>{
         })
         console.log(sixDaysForecast)
         sixDaysForecast.forEach(eachItem=>{
-            createAndAppendWeatherCard(eachItem)
+            weatherCardsCont.insertAdjacentHTML('beforeend',createAndAppendWeatherCard(eachItem));
         })
 
 
